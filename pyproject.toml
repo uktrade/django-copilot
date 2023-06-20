@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "copilot-django"
 version = "0.1.0"
-description = "Helper functions for running django in copilot/ECS"
+description = "Helper functions to run Django applications with AWS Copilot/ECS."
 authors = ["Department for Business and Trade Platform Team <sre-team@digital.trade.gov.uk>"]
 readme = "README.md"
 packages = [{include = "copilot_django"}]
