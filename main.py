@@ -10,7 +10,7 @@ def is_copilot():
 
 
 def get_container_ip():
-    """Get the pribate IP of the container;
+    """Get the private IP of the container;
 
     Usage in settings.py:
 
@@ -22,8 +22,6 @@ def get_container_ip():
     """
 
     if is_copilot():
-
-        aws_metadata = None
 
         try:
             aws_metadata = requests.get(os.env["ECS_CONTAINER_METADATA_URI_V4"], timeout = 0.01).json()
