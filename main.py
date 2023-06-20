@@ -24,7 +24,7 @@ def get_container_ip():
     if is_copilot():
 
         try:
-            aws_metadata = requests.get(os.env["ECS_CONTAINER_METADATA_URI_V4"], timeout = 0.01).json()
+            aws_metadata = requests.get(os.environ["ECS_CONTAINER_METADATA_URI_V4"], timeout = 0.01).json()
             return aws_metadata["Networks"][0]["IPv4Addresses"][0]
         except requests.exceptions.RequestException:
             pass
