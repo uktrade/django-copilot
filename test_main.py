@@ -20,10 +20,13 @@ TEST_CONN = {
 }
 
 
-@pytest.mark.parametrize("environ,output", [
-    ({"ECS_CONTAINER_METADATA_URI_V4": "https://fake/url"}, True),
-    ({}, False),
-])
+@pytest.mark.parametrize(
+    "environ,output",
+    [
+        ({"ECS_CONTAINER_METADATA_URI_V4": "https://fake/url"}, True),
+        ({}, False),
+    ],
+)
 def test_is_copilot(environ, output):
     with patch.dict(os.environ, environ, clear=True):
         assert is_copilot() == output
@@ -54,26 +57,23 @@ def test_get_container_ip_not_in_copilot_returns_none():
     assert not get_container_ip()
 
 
-@patch.dict(os.environ, {"ECS_CONTAINER_METADATA_URI_V4": "http://test.com"}, clear=True)
+@patch.dict(
+    os.environ, {"ECS_CONTAINER_METADATA_URI_V4": "http://test.com"}, clear=True
+)
 def test_get_container_ip_request_exception_returns_none():
     with requests_mock.Mocker() as mock:
-        mock.get('http://test.com', exc=requests.exceptions.RequestException)
+        mock.get("http://test.com", exc=requests.exceptions.RequestException)
 
         assert not get_container_ip()
 
 
-@patch.dict(os.environ, {"ECS_CONTAINER_METADATA_URI_V4": "http://test.com"}, clear=True)
+@patch.dict(
+    os.environ, {"ECS_CONTAINER_METADATA_URI_V4": "http://test.com"}, clear=True
+)
 def test_get_container_ip_success():
-    mock_response = {
-        "Networks": [
-            {
-                "IPv4Addresses": ["1.1.1.1"]
-            }
-        ]
-    }
+    mock_response = {"Networks": [{"IPv4Addresses": ["1.1.1.1"]}]}
 
     with requests_mock.Mocker() as mock:
-        mock.get('http://test.com', json=mock_response)
+        mock.get("http://test.com", json=mock_response)
 
         assert get_container_ip() == "1.1.1.1"
-
