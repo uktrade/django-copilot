@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "copilot-django"
+name = "copilot-python"
 version = "0.1.0"
-description = "Helper functions to run Django applications with AWS Copilot/ECS."
+description = "Helper functions to run Django and Flask applications in AWS Copilot/ECS."
 authors = ["Department for Business and Trade Platform Team <sre-team@digital.trade.gov.uk>"]
 readme = "README.md"
-packages = [{include = "copilot_django"}]
+packages = [{include = "main.py"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
