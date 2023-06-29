@@ -6,7 +6,7 @@ import requests
 import requests_mock
 from unittest.mock import patch
 
-from main import database_from_env, get_container_ip, is_copilot, setup_database
+from src.main import database_from_env, get_container_ip, is_copilot, setup_database
 
 
 TEST_CONN = {
