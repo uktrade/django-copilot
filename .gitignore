@@ -6,8 +6,6 @@ venv/
 _py_cache__/
 .git/
 
-dbt_copilot_python/
-
 .env
 .cache/
 .coverage
