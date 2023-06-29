@@ -2,13 +2,15 @@
 
 A set of utility functions for running Django & Flask apps in AWS ECS via AWS Copilot.
 
-## Installation
+## Using  dbt-copilot-python
+
+### Installation
 
 ```
 pip install dbt-copilot-python
 ```
 
-## Usage
+### Usage
 
 In settings.py:
 
@@ -33,3 +35,17 @@ from dbt_copilot import aws_database_config
 DATABASES = aws_database_config("ENVIRONMENT_KEY")
 ```
 
+## Contributing to dbt-copilot-python
+
+### Requirements
+
+* Poetry  
+  `pip install poetry`
+
+### Install dependencies
+
+`poetry install`
+
+### Run the tests
+
+`poetry run pytest`
