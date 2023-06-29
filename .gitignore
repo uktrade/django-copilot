@@ -6,7 +6,7 @@ venv/
 _py_cache__/
 .git/
 
-src/
+dbt_copilot_python/
 
 .env
 .cache/

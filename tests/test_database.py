@@ -1,13 +1,9 @@
 import json
 import os
-import pytest
 
-import requests
-import requests_mock
 from unittest.mock import patch
 
-from src.main import database_from_env, get_container_ip, is_copilot, setup_database
-
+from dbt_copilot_python.database import setup_database, database_from_env
 
 TEST_CONN = {
     "dbClusterIdentifier": "cluster-identifier",
@@ -18,18 +14,6 @@ TEST_CONN = {
     "port": 5432,
     "host": "hostname.com",
 }
-
-
-@pytest.mark.parametrize(
-    "environ,output",
-    [
-        ({"ECS_CONTAINER_METADATA_URI_V4": "https://fake/url"}, True),
-        ({}, False),
-    ],
-)
-def test_is_copilot(environ, output):
-    with patch.dict(os.environ, environ, clear=True):
-        assert is_copilot() == output
 
 
 def test_setup_database():
@@ -44,7 +28,7 @@ def test_setup_database():
         }
 
 
-def test_setup_databse_extra_keys():
+def test_setup_database_extra_keys():
     extra_keys = {
         "extra1": "test",
         "extra2": "test2"
@@ -67,31 +51,3 @@ def test_database_from_env():
         assert database_from_env("DATABASE_CONFIG") == {
             "default": setup_database("DATABASE_CONFIG")
         }
-
-
-def test_get_container_ip_not_in_copilot_returns_none():
-    assert "ECS_CONTAINER_METADATA_URI_V4" not in os.environ
-
-    assert not get_container_ip()
-
-
-@patch.dict(
-    os.environ, {"ECS_CONTAINER_METADATA_URI_V4": "http://test.com"}, clear=True
-)
-def test_get_container_ip_request_exception_returns_none():
-    with requests_mock.Mocker() as mock:
-        mock.get("http://test.com", exc=requests.exceptions.RequestException)
-
-        assert not get_container_ip()
-
-
-@patch.dict(
-    os.environ, {"ECS_CONTAINER_METADATA_URI_V4": "http://test.com"}, clear=True
-)
-def test_get_container_ip_success():
-    mock_response = {"Networks": [{"IPv4Addresses": ["1.1.1.1"]}]}
-
-    with requests_mock.Mocker() as mock:
-        mock.get("http://test.com", json=mock_response)
-
-        assert get_container_ip() == "1.1.1.1"
