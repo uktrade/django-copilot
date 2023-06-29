@@ -44,6 +44,24 @@ def test_setup_database():
         }
 
 
+def test_setup_databse_extra_keys():
+    extra_keys = {
+        "extra1": "test",
+        "extra2": "test2"
+    }
+
+    with patch.dict(os.environ, {"DATABASE_CONFIG": json.dumps(TEST_CONN)}, clear=True):
+        assert setup_database("DATABASE_CONFIG", **extra_keys) == {
+            "ENGINE": f"django.db.backends.{TEST_CONN['engine']}",
+            "NAME": TEST_CONN["dbname"],
+            "USER": TEST_CONN["username"],
+            "PASSWORD": TEST_CONN["password"],
+            "HOST": TEST_CONN["host"],
+            "PORT": TEST_CONN["port"],
+            **extra_keys,
+        }
+
+
 def test_database_from_env():
     with patch.dict(os.environ, {"DATABASE_CONFIG": json.dumps(TEST_CONN)}, clear=True):
         assert database_from_env("DATABASE_CONFIG") == {
