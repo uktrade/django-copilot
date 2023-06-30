@@ -5,15 +5,12 @@ import requests
 from dbt_copilot_python.utility import is_copilot
 
 
-def get_container_ip():
-    """Get the private IP of the container;
+def setup_allowed_hosts(allowed_hosts: list[str]) -> list[str]:
+    """Add the private IP address of the container to ALLOWED_HOSTS if it's a Copilot application
 
     Usage in settings.py:
 
-    private_ip = get_container_ip()
-
-    if private_ip:
-        ALLOWED_HOSTS.append(private_ip)
+    ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
 
     """
 
@@ -22,6 +19,8 @@ def get_container_ip():
             aws_metadata = requests.get(
                 os.environ["ECS_CONTAINER_METADATA_URI_V4"], timeout=0.01
             ).json()
-            return aws_metadata["Networks"][0]["IPv4Addresses"][0]
+            allowed_hosts.append(aws_metadata["Networks"][0]["IPv4Addresses"][0])
         except requests.exceptions.RequestException:
             pass
+
+    return allowed_hosts

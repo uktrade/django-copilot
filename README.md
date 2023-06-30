@@ -17,14 +17,11 @@ In settings.py:
 1. Add the container IP to ALLOWED_HOSTS so that the load balancer/ALB healthcheck will succeed: 
 ```
 
-from dbt-copilot-python import get_aws_ecs_container_ip
+from dbt_copilot_python.network import setup_allowed_hosts
 
 ALLOWED_HOSTS = [...]
 
-container_ip = get_ecs_container_ip()
-
-if container_ip
-    ALLOWED_HOSTS.append(container_ip)
+ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
 ```
 
 2. Configure the `DATABASES` setting from an RDS json object stored in SSM parameter store
