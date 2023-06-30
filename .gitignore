@@ -22,6 +22,8 @@ _py_cache__/
 
 *.swp
 
+.tox
+
 .pytest_cache/
 
 staticfiles/
