@@ -7,10 +7,15 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
-      - id: mixed-line-ending
-        name: Replace line endings
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-byte-order-marker
+      - id: check-merge-conflict
+      - id: debug-statements
+      - id: check-yaml
       - id: detect-private-key
-        name: Detect private keys
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
   - repo: https://github.com/myint/autoflake.git
     rev: v2.1.1
     hooks:
@@ -41,3 +46,9 @@ repos:
     rev: '0.78'
     hooks:
       - id: flynt
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.5.1
+    hooks:
+    -   id: python-use-type-annotations
+    -   id: python-no-eval
+    -   id: python-no-log-warn
