@@ -18,7 +18,7 @@ def test_setup_allowed_hosts_with_not_copilot_does_not_add_ip(allowed_hosts: lis
 
     allowed_hosts = setup_allowed_hosts(allowed_hosts)
 
-    assert allowed_hosts == ['0.0.0.0']
+    assert allowed_hosts == ["0.0.0.0"]
 
 
 @patch.dict(
@@ -30,7 +30,7 @@ def test_setup_allowed_hosts_with_exception_does_not_add_ip(allowed_hosts):
 
         allowed_hosts = setup_allowed_hosts(allowed_hosts)
 
-        assert allowed_hosts == ['0.0.0.0']
+        assert allowed_hosts == ["0.0.0.0"]
 
 
 @patch.dict(
@@ -44,4 +44,4 @@ def test_setup_allowed_hosts_with_copilot_adds_ip(allowed_hosts):
 
         allowed_hosts = setup_allowed_hosts(allowed_hosts)
 
-        assert allowed_hosts == ['0.0.0.0', '1.1.1.1']
+        assert allowed_hosts == ["0.0.0.0", "1.1.1.1"]

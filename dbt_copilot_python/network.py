@@ -6,12 +6,13 @@ from dbt_copilot_python.utility import is_copilot
 
 
 def setup_allowed_hosts(allowed_hosts: list[str]) -> list[str]:
-    """Add the private IP address of the container to ALLOWED_HOSTS if it's a Copilot application
+    """
+    Add the private IP address of the container to ALLOWED_HOSTS if it's a
+    Copilot application.
 
     Usage in settings.py:
 
     ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
-
     """
 
     if is_copilot():

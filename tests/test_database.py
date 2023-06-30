@@ -1,9 +1,9 @@
 import json
 import os
-
 from unittest.mock import patch
 
-from dbt_copilot_python.database import setup_database, database_from_env
+from dbt_copilot_python.database import database_from_env
+from dbt_copilot_python.database import setup_database
 
 TEST_CONN = {
     "dbClusterIdentifier": "cluster-identifier",
@@ -29,10 +29,7 @@ def test_setup_database():
 
 
 def test_setup_database_extra_keys():
-    extra_keys = {
-        "extra1": "test",
-        "extra2": "test2"
-    }
+    extra_keys = {"extra1": "test", "extra2": "test2"}
 
     with patch.dict(os.environ, {"DATABASE_CONFIG": json.dumps(TEST_CONN)}, clear=True):
         assert setup_database("DATABASE_CONFIG", **extra_keys) == {

@@ -3,7 +3,8 @@ import os
 
 
 def setup_database(environment_key, **extra_keys):
-    """Take a Copilot database environment variable and return the django configuration"""
+    """Take a Copilot database environment variable and return the django
+    configuration."""
     config = json.loads(os.environ[environment_key])
 
     return {
@@ -18,7 +19,9 @@ def setup_database(environment_key, **extra_keys):
 
 
 def database_from_env(environment_key, **extra_keys):
-    """Set up the default django database from a Copilot database environment variable
+    """
+    Set up the default django database from a Copilot database environment
+    variable.
 
     Usage in settings.py:
 

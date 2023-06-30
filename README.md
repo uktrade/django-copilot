@@ -39,9 +39,9 @@ DATABASES = aws_database_config("ENVIRONMENT_KEY")
 * Poetry  
   `pip install poetry`
 
-### Install dependencies
+### Install dependencies & pre-commit hooks
 
-`poetry install`
+`poetry install && poetry run pre-commit install`
 
 ### Run the tests
 
