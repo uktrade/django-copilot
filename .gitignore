@@ -6,8 +6,6 @@ venv/
 _py_cache__/
 .git/
 
-src/
-
 .env
 .cache/
 .coverage
@@ -24,8 +22,9 @@ src/
 
 *.swp
 
+.tox
+
 .pytest_cache/
 
 staticfiles/
 node_modules/
-

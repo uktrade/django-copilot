@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.10
+    commands:
+      - echo Running tests
+      - pip install poetry
+      - poetry install --no-root --only dev
+
+  build:
+    commands:
+      - poetry run pytest 
