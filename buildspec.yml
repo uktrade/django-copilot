@@ -2,13 +2,16 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      python: 3.10
     commands:
-      - echo Running tests
+      - echo Setting local Python versions
+      - pyenv versions | awk 'match($0, /\d\.\d+\.\d+/) { print substr($0, RSTART, RLENGTH) }' > .python-version
+      - echo Installing dependencies
       - pip install poetry
-      - poetry install --no-root --only dev
+      - poetry install
 
   build:
     commands:
-      - poetry run pytest 
+      - echo Running check-cloudformation
+      - poetry run ./copilot_helper.py check-cloudformation
+      - echo Running tests
+      - poetry run tox
