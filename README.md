@@ -1,4 +1,4 @@
-# DBT Copilot Django
+# DBT Copilot Python
 
 ![](https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiTG41bUNVdHN1b3NRS0hTYUlmMktLbnNNQzEyTlpMRDBlYlZiV1ZjNnl4b3dyMXl0R3VIUEVIbGVnYVJWbHd0OVZndVhURFpnckp5dWx0R0llMVpHUktzPSIsIml2UGFyYW1ldGVyU3BlYyI6ImthS3RRRUtOYkljSUVVUHMiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=main)
 
