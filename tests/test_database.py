@@ -3,6 +3,7 @@ import os
 from unittest.mock import patch
 
 from dbt_copilot_python.database import database_from_env
+from dbt_copilot_python.database import database_url_from_env
 from dbt_copilot_python.database import setup_database
 
 TEST_CONN = {
@@ -48,3 +49,11 @@ def test_database_from_env():
         assert database_from_env("DATABASE_CONFIG") == {
             "default": setup_database("DATABASE_CONFIG")
         }
+
+
+def test_database_url_from_env():
+    with patch.dict(os.environ, {"DATABASE_CONFIG": json.dumps(TEST_CONN)}, clear=True):
+        assert (
+            database_url_from_env("DATABASE_CONFIG")
+            == "postgres://postgres:test-password@hostname.com:5432/main"
+        )
