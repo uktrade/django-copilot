@@ -43,7 +43,7 @@ To configure the `DATABASES` setting from an RDS JSON object stored in AWS Secre
    
     DATABASES = {
         "default": dj_database_url.config(
-            default=database_url_from_env("DATABASE_CREDENTIALS")
+            default=database_url_from_env("DATABASE_ENV_VAR_KEY")
         )
     }
     ```
@@ -53,7 +53,7 @@ To configure the `DATABASES` setting from an RDS JSON object stored in AWS Secre
     ```
     from dbt-copilot-python.database import database_from_env
 
-    DATABASES = database_from_env("ENVIRONMENT_KEY")
+    DATABASES = database_from_env("DATABASE_ENV_VAR_KEY")
     ```
 
 ## Contributing to `dbt-copilot-python`
