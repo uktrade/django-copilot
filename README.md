@@ -34,7 +34,7 @@ To configure the `DATABASES` setting from an RDS JSON object stored in AWS Secre
 
 1. Configure the `DATABASES` setting to use a database URL (recommended):
 
-    Note: This is dependent on the `dj-database-url` package which can be installed via `pip install dj-database-url`.
+    Note: This is dependent on the [`dj-database-url`](https://pypi.org/project/dj-database-url/) package which can be installed via `pip install dj-database-url`.
 
     ```
     import dj_database_url
