@@ -14,24 +14,46 @@ pip install dbt-copilot-python
 
 ### Usage
 
-In `settings.py`:
+In `settings.py`...
 
-1. Add the ECS container IP to `ALLOWED_HOSTS` so that the Application Load Balancer (ALB) healthcheck will succeed:
+#### ALLOWED_HOSTS
+
+Add the ECS container IP to `ALLOWED_HOSTS` so that the Application Load Balancer (ALB) healthcheck will succeed:
+
+```
+from dbt_copilot_python.network import setup_allowed_hosts
+
+ALLOWED_HOSTS = [...]
+
+ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
+```
+
+#### DATABASES
+
+To configure the `DATABASES` setting from an RDS JSON object stored in SSM Parameter Store, there are two options.
+
+1. Configure the `DATABASES` setting to use a dictionary containing the settings:
 
     ```
-    from dbt_copilot_python.network import setup_allowed_hosts
-    
-    ALLOWED_HOSTS = [...]
-    
-    ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
+    from dbt-copilot-python.database import database_from_env
+
+    DATABASES = database_from_env("ENVIRONMENT_KEY")
     ```
 
-2. Configure the `DATABASES` setting from an RDS JSON object stored in SSM Parameter Store:
+2. Configure the `DATABASES` setting to use a database URL:
+
+    Note: This is dependent on the `dj-database-url` package which can be installed via `pip install dj-database-url` or added to your requirements as needed.
 
     ```
-    from dbt-copilot-python import aws_database_config
+    import dj_database_url
+
+    from dbt_copilot_python.database import database_url_from_env
    
-    DATABASES = aws_database_config("ENVIRONMENT_KEY")
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=database_url_from_env("DATABASE_CREDENTIALS")
+        )
+    }
     ```
 
 ## Contributing to `dbt-copilot-python`
