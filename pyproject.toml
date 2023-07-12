@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dbt-copilot-python"
-version = "0.1.1"
+version = "0.1.2"
 description = "Helper functions to run Django and Flask applications in AWS Copilot/ECS."
 authors = ["Department for Business and Trade Platform Team <sre-team@digital.trade.gov.uk>"]
 readme = "README.md"
