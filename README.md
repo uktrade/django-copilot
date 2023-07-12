@@ -30,19 +30,11 @@ ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
 
 #### DATABASES
 
-To configure the `DATABASES` setting from an RDS JSON object stored in SSM Parameter Store, there are two options.
+To configure the `DATABASES` setting from an RDS JSON object stored in AWS Secrets Manager, there are two options.
 
-1. Configure the `DATABASES` setting to use a dictionary containing the settings:
+1. Configure the `DATABASES` setting to use a database URL (recommended):
 
-    ```
-    from dbt-copilot-python.database import database_from_env
-
-    DATABASES = database_from_env("ENVIRONMENT_KEY")
-    ```
-
-2. Configure the `DATABASES` setting to use a database URL:
-
-    Note: This is dependent on the `dj-database-url` package which can be installed via `pip install dj-database-url` or added to your requirements as needed.
+    Note: This is dependent on the `dj-database-url` package which can be installed via `pip install dj-database-url`.
 
     ```
     import dj_database_url
@@ -54,6 +46,14 @@ To configure the `DATABASES` setting from an RDS JSON object stored in SSM Param
             default=database_url_from_env("DATABASE_CREDENTIALS")
         )
     }
+    ```
+
+2. Configure the `DATABASES` setting to use a dictionary containing the settings:
+
+    ```
+    from dbt-copilot-python.database import database_from_env
+
+    DATABASES = database_from_env("ENVIRONMENT_KEY")
     ```
 
 ## Contributing to `dbt-copilot-python`
