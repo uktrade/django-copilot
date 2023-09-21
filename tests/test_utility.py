@@ -9,7 +9,7 @@ from dbt_copilot_python.utility import is_copilot
 @pytest.mark.parametrize(
     "environ,output",
     [
-        ({"ECS_CONTAINER_METADATA_URI_V4": "https://fake/url"}, True),
+        ({"COPILOT_ENVIRONMENT_NAME": "https://fake/url"}, True),
         ({}, False),
     ],
 )
