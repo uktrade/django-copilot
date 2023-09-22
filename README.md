@@ -73,3 +73,38 @@ poetry install && poetry run pre-commit install
 ```
 poetry run pytest
 ```
+
+### Publishing
+
+To publish the Python package `dbt-copilot-python`, you will need an API token.
+
+1. Acquire API token from [Passman](https://passman.ci.uktrade.digital/secret/cc82a3f7-ddfa-4312-ab56-1ff8528dadc8/).
+   - Request access from the SRE team.
+   - _Note: You will need access to the `platform` group in Passman._
+2. Run `poetry config pypi-token.pypi <token>` to add the token to your Poetry configuration.
+
+Update the version, as the same version cannot be published to PyPi.
+
+```
+poetry version patch
+```
+
+More options for the `version` command can be found in the [Poetry documentation](https://python-poetry.org/docs/cli/#version). For example, for a minor version bump: `poetry version minor`.
+
+Build the Python package.
+
+```
+poetry build
+```
+
+Publish the Python package.
+
+_Note: Make sure your Pull Request (PR) is approved and contains the version upgrade in `pyproject.toml` before publishing the package._
+
+```
+poetry publish
+```
+
+Check the [PyPi Release history](https://pypi.org/project/dbt-copilot-python/#history) to make sure the package has been updated.
+
+For an optional manual check, install the package locally and test everything works as expected.
