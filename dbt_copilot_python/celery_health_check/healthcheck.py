@@ -20,20 +20,19 @@ def health_checks():
         print("Healthcheck: Celery heartbeat file NOT found.")
         sys.exit(1)
 
-    stats = HEARTBEAT_FILE.stat()
     heartbeat_timestamp = float(HEARTBEAT_FILE.read_text())
     current_timestamp = datetime.timestamp(datetime.now(tz=tz.UTC))
     time_diff = current_timestamp - heartbeat_timestamp
     if time_diff > 60:
         print(
-            "Healthcheck: Celery Worker heartbeat file timestamp" +
-            "DOES NOT match the given constraint."
+            "Healthcheck: Celery Worker heartbeat file timestamp"
+            + "DOES NOT match the given constraint."
         )
         sys.exit(1)
 
     print(
-        "Healthcheck: Celery Worker heartbeat file found and timestamp" +
-        "matches the given constraint."
+        "Healthcheck: Celery Worker heartbeat file found and timestamp"
+        + "matches the given constraint."
     )
     sys.exit(0)
 
