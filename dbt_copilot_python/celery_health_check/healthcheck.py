@@ -6,8 +6,9 @@ from datetime import datetime
 from celery import signals
 from dateutil.tz import tz
 
+from .const import HEARTBEAT_FILE
+from .const import READINESS_FILE
 from .liveness_probe import LivenessProbe
-from .const import HEARTBEAT_FILE, READINESS_FILE
 
 
 def worker_ready(**_):
