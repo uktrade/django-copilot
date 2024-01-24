@@ -32,7 +32,7 @@ Add the health check to the Celery worker service in `docker-compose.yml`...
 
 ```yaml
 healthcheck:
-  test: [ "CMD-SHELL", "python TBC!!!celery_worker/healthcheck.py" ]
+  test: [ "CMD-SHELL", "python -m dbt_copilot_python.celery_health_check.healthcheck" ]
   interval: 10s
   timeout: 5s
   retries: 2
@@ -43,7 +43,7 @@ In your `*-deploy` codebase, add the health check to the Celery worker service i
 
 ```yaml
 healthcheck:
-  command: [ "CMD-SHELL", "launcher bash -c 'python TBC!!!celery_worker/healthcheck.py'" ]
+  command: [ "CMD-SHELL", "launcher bash -c 'python -m dbt_copilot_python.celery_health_check.healthcheck'" ]
   interval: 10s
   timeout: 5s
   retries: 2
