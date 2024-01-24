@@ -14,11 +14,9 @@ pip install dbt-copilot-python
 
 ### Usage
 
-In `settings.py`...
+#### `ALLOWED_HOSTS` setting
 
-#### ALLOWED_HOSTS
-
-Add the ECS container IP to `ALLOWED_HOSTS` so that the Application Load Balancer (ALB) healthcheck will succeed:
+Add the ECS container IP to `ALLOWED_HOSTS` setting so that the Application Load Balancer (ALB) healthcheck will succeed:
 
 ```
 from dbt_copilot_python.network import setup_allowed_hosts
@@ -28,7 +26,31 @@ ALLOWED_HOSTS = [...]
 ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
 ```
 
-#### DATABASES
+#### Celery health check
+
+Add the health check to the Celery worker service in `docker-compose.yml`...
+
+```yaml
+healthcheck:
+  test: [ "CMD-SHELL", "python TBC!!!celery_worker/healthcheck.py" ]
+  interval: 10s
+  timeout: 5s
+  retries: 2
+  start_period: 5s
+```
+
+In your `*-deploy` codebase, add the health check to the Celery worker service in `copilot/celery-worker/manifest.yml`...
+
+```yaml
+healthcheck:
+  command: [ "CMD-SHELL", "launcher bash -c 'python TBC!!!celery_worker/healthcheck.py'" ]
+  interval: 10s
+  timeout: 5s
+  retries: 2
+  start_period: 10s
+```
+
+#### `DATABASES` setting
 
 To configure the `DATABASES` setting from an RDS JSON object stored in AWS Secrets Manager, there are two options.
 
