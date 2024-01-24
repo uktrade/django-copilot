@@ -1,11 +1,9 @@
-import tempfile
 from datetime import datetime
-from pathlib import Path
 
 from celery import bootsteps
 from dateutil.tz import tz
 
-from .healthcheck import HEARTBEAT_FILE
+from .const import HEARTBEAT_FILE
 
 
 class LivenessProbe(bootsteps.StartStopStep):

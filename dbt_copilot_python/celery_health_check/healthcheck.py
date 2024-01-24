@@ -1,14 +1,29 @@
 # See https://medium.com/ambient-innovation/health-checks-for-celery-in-kubernetes-cf3274a3e106
 
 import sys
-import tempfile
 from datetime import datetime
-from pathlib import Path
 
+from celery import signals
 from dateutil.tz import tz
 
-READINESS_FILE = Path(f"{tempfile.gettempdir()}/celery_ready")
-HEARTBEAT_FILE = Path(f"{tempfile.gettempdir()}/celery_worker_heartbeat")
+from .liveness_probe import LivenessProbe
+from .const import HEARTBEAT_FILE, READINESS_FILE
+
+
+def worker_ready(**_):
+    READINESS_FILE.touch()
+
+
+def worker_shutdown(**_):
+    READINESS_FILE.unlink(missing_ok=True)
+
+
+def setup(celery_app=None):
+    signals.worker_ready.connect(worker_ready)
+    signals.worker_shutdown.connect(worker_shutdown)
+
+    celery_app.steps["worker"].add(LivenessProbe)
+    return celery_app
 
 
 def check_health():
