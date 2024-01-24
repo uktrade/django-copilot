@@ -11,7 +11,7 @@ READINESS_FILE = Path(f"{tempfile.gettempdir()}/celery_ready")
 HEARTBEAT_FILE = Path(f"{tempfile.gettempdir()}/celery_worker_heartbeat")
 
 
-def health_checks():
+def check_health():
     if not READINESS_FILE.is_file():
         print("Healthcheck: Celery readiness file NOT found.")
         sys.exit(1)
@@ -25,17 +25,17 @@ def health_checks():
     time_diff = current_timestamp - heartbeat_timestamp
     if time_diff > 60:
         print(
-            "Healthcheck: Celery Worker heartbeat file timestamp"
+            "Healthcheck: Celery Worker heartbeat file timestamp "
             + "DOES NOT match the given constraint."
         )
         sys.exit(1)
 
     print(
-        "Healthcheck: Celery Worker heartbeat file found and timestamp"
+        "Healthcheck: Celery Worker heartbeat file found and timestamp "
         + "matches the given constraint."
     )
     sys.exit(0)
 
 
 if __name__ == "__main__":
-    health_checks()
+    check_health()

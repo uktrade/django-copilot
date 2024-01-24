@@ -5,7 +5,7 @@ from pathlib import Path
 from celery import bootsteps
 from dateutil.tz import tz
 
-HEARTBEAT_FILE = Path(f"{tempfile.gettempdir()}/celery_worker_heartbeat")
+from .healthcheck import HEARTBEAT_FILE
 
 
 class LivenessProbe(bootsteps.StartStopStep):
