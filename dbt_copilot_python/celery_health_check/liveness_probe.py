@@ -6,6 +6,7 @@ from dateutil.tz import tz
 from .const import HEARTBEAT_FILE
 
 
+# Todo: Should we call this "HeartBeat"?
 class LivenessProbe(bootsteps.StartStopStep):
     requires = {"celery.worker.components:Timer"}
 
