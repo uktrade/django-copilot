@@ -11,17 +11,19 @@ from .const import READINESS_FILE
 from .liveness_probe import LivenessProbe
 
 
-def worker_ready(**_):
+def on_worker_ready(**_):
+    print(READINESS_FILE)
     READINESS_FILE.touch()
 
 
-def worker_shutdown(**_):
-    READINESS_FILE.unlink(missing_ok=True)
-
-
 def setup(celery_app=None):
-    signals.worker_ready.connect(worker_ready)
-    signals.worker_shutdown.connect(worker_shutdown)
+    signals.worker_ready.connect(
+        on_worker_ready
+    )
+
+    signals.worker_shutdown.connect(
+        lambda **_: READINESS_FILE.unlink(missing_ok=True)
+    )
 
     celery_app.steps["worker"].add(LivenessProbe)
     return celery_app
@@ -32,6 +34,7 @@ def check_health():
         print("Healthcheck: Celery readiness file NOT found.")
         sys.exit(1)
 
+    print(HEARTBEAT_FILE)
     if not HEARTBEAT_FILE.is_file():
         print("Healthcheck: Celery heartbeat file NOT found.")
         sys.exit(1)
