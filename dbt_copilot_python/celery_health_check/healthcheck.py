@@ -1,10 +1,10 @@
 # See https://medium.com/ambient-innovation/health-checks-for-celery-in-kubernetes-cf3274a3e106
 
 import sys
+from datetime import UTC
 from datetime import datetime
 
 from celery import signals
-from dateutil.tz import tz
 
 from .const import HEARTBEAT_FILE
 from .const import READINESS_FILE
@@ -12,16 +12,17 @@ from .heartbeat import HeartBeat
 
 
 def on_worker_ready(**_):
-    print(f"READINESS_FILE: {READINESS_FILE}")
-    print(f"READINESS_FILE exists before touch: {READINESS_FILE.is_file()}")
     READINESS_FILE.touch()
-    print(f"READINESS_FILE exists after touch: {READINESS_FILE.is_file()}")
+
+
+def on_worker_shutdown(**_):
+    READINESS_FILE.unlink(missing_ok=True)
 
 
 def setup(celery_app=None):
     signals.worker_ready.connect(on_worker_ready)
 
-    signals.worker_shutdown.connect(lambda **_: READINESS_FILE.unlink(missing_ok=True))
+    signals.worker_shutdown.connect(on_worker_shutdown)
 
     celery_app.steps["worker"].add(HeartBeat)
     return celery_app
@@ -37,7 +38,7 @@ def check_health():
         sys.exit(1)
 
     heartbeat_timestamp = float(HEARTBEAT_FILE.read_text())
-    current_timestamp = datetime.timestamp(datetime.now(tz=tz.UTC))
+    current_timestamp = datetime.now(UTC).timestamp()
     time_diff = current_timestamp - heartbeat_timestamp
     if time_diff > 60:
         print(
