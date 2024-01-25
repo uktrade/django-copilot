@@ -1,6 +1,5 @@
-import time
-
 import pytest
+from celery import Celery
 
 from dbt_copilot_python.celery_health_check import healthcheck
 from dbt_copilot_python.celery_health_check import liveness_probe
@@ -34,12 +33,13 @@ def test_setup_assigns_liveliness_probe(setup_and_teardown, celery_app):
 @pytest.mark.usefixtures("celery_worker")
 def test_check_health_happy_path(setup_and_teardown, mocker, celery_worker, celery_app):
     celery_app = healthcheck.setup(celery_app)
+    Celery("demodjango_celery")
 
-    time.sleep(5)
+    # time.sleep(5)
     # spy = mocker.spy(healthcheck, "on_worker_ready")
     # assert spy.call_count == 1
 
-    # healthcheck.on_worker_ready()
+    healthcheck.on_worker_ready()
 
     with pytest.raises(SystemExit) as sys_exit_e:
         healthcheck.check_health()
