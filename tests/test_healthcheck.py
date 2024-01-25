@@ -1,8 +1,8 @@
-from datetime import UTC
 from datetime import datetime
 from datetime import timedelta
 
 import pytest
+from dateutil.tz import tz
 
 from dbt_copilot_python.celery_health_check import healthcheck
 from dbt_copilot_python.celery_health_check.const import HEARTBEAT_FILE
@@ -92,6 +92,8 @@ def fake_celery_setup(ready, alive):
         healthcheck.on_worker_ready()
 
     if alive == "alive":
-        HEARTBEAT_FILE.write_text(str(datetime.now(UTC).timestamp()))
+        HEARTBEAT_FILE.write_text(str(datetime.timestamp(datetime.now(tz=tz.UTC))))
     elif alive == "died":
-        HEARTBEAT_FILE.write_text(str((datetime.now(UTC) - timedelta(minutes=1)).timestamp()))
+        HEARTBEAT_FILE.write_text(
+            str((datetime.timestamp(datetime.now(tz=tz.UTC) - timedelta(minutes=1))))
+        )

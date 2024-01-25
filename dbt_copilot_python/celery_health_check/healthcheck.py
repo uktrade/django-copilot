@@ -1,10 +1,10 @@
 # See https://medium.com/ambient-innovation/health-checks-for-celery-in-kubernetes-cf3274a3e106
 
 import sys
-from datetime import UTC
 from datetime import datetime
 
 from celery import signals
+from dateutil.tz import tz
 
 from .const import HEARTBEAT_FILE
 from .const import READINESS_FILE
@@ -38,7 +38,7 @@ def check_health():
         sys.exit(1)
 
     heartbeat_timestamp = float(HEARTBEAT_FILE.read_text())
-    current_timestamp = datetime.now(UTC).timestamp()
+    current_timestamp = datetime.timestamp(datetime.now(tz=tz.UTC))
     time_diff = current_timestamp - heartbeat_timestamp
     if time_diff > 60:
         print(
