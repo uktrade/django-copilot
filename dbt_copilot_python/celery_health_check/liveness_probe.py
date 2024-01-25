@@ -27,4 +27,6 @@ class LivenessProbe(bootsteps.StartStopStep):
         HEARTBEAT_FILE.unlink(missing_ok=True)
 
     def update_heartbeat_file(self, worker):
+        print(f"HEARTBEAT_FILE: {HEARTBEAT_FILE}")
         HEARTBEAT_FILE.write_text(str(datetime.timestamp(datetime.now(tz=tz.UTC))))
+        print(f"HEARTBEAT_FILE contents after update: {HEARTBEAT_FILE.read_text()}")
