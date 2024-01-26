@@ -6,6 +6,10 @@ A set of utility functions for running Django & Flask apps in AWS ECS via AWS Co
 
 ## Using `dbt-copilot-python`
 
+### Supported Python versions
+
+3.9, 3.10, 3.11 and 3.12.
+
 ### Installation
 
 ```
