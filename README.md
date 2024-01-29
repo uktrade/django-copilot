@@ -12,19 +12,17 @@ A set of utility functions for running Django & Flask apps in AWS ECS via AWS Co
 
 ### Installation
 
-```
+```shell
 pip install dbt-copilot-python
 ```
 
 ### Usage
 
-In `settings.py`...
+#### `ALLOWED_HOSTS` setting
 
-#### ALLOWED_HOSTS
+Add the ECS container IP to `ALLOWED_HOSTS` setting so that the Application Load Balancer (ALB) healthcheck will succeed:
 
-Add the ECS container IP to `ALLOWED_HOSTS` so that the Application Load Balancer (ALB) healthcheck will succeed:
-
-```
+```python
 from dbt_copilot_python.network import setup_allowed_hosts
 
 ALLOWED_HOSTS = [...]
@@ -32,7 +30,42 @@ ALLOWED_HOSTS = [...]
 ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
 ```
 
-#### DATABASES
+#### Celery health check
+
+Add the health check in your application's Celery config file...
+
+```python
+from dbt_copilot_python.celery_health_check import healthcheck
+
+celery_app = Celery("application_name")
+...
+
+celery_app = healthcheck.setup(celery_app)
+```
+
+Add the health check to the Celery worker service in `docker-compose.yml`...
+
+```yaml
+healthcheck:
+  test: [ "CMD-SHELL", "python -m dbt_copilot_python.celery_health_check.healthcheck" ]
+  interval: 10s
+  timeout: 5s
+  retries: 2
+  start_period: 5s
+```
+
+In your `*-deploy` codebase, add the health check to the Celery worker service in `copilot/celery-worker/manifest.yml`...
+
+```yaml
+healthcheck:
+  command: [ "CMD-SHELL", "launcher bash -c 'python -m dbt_copilot_python.celery_health_check.healthcheck'" ]
+  interval: 10s
+  timeout: 5s
+  retries: 2
+  start_period: 10s
+```
+
+#### `DATABASES` setting
 
 To configure the `DATABASES` setting from an RDS JSON object stored in AWS Secrets Manager, there are two options.
 
@@ -40,7 +73,7 @@ To configure the `DATABASES` setting from an RDS JSON object stored in AWS Secre
 
     Note: This is dependent on the [`dj-database-url`](https://pypi.org/project/dj-database-url/) package which can be installed via `pip install dj-database-url`.
 
-    ```
+    ```python
     import dj_database_url
 
     from dbt_copilot_python.database import database_url_from_env
@@ -54,7 +87,7 @@ To configure the `DATABASES` setting from an RDS JSON object stored in AWS Secre
 
 2. Configure the `DATABASES` setting to use a dictionary containing the settings:
 
-    ```
+    ```python
     from dbt-copilot-python.database import database_from_env
 
     DATABASES = database_from_env("DATABASE_ENV_VAR_KEY")
@@ -68,13 +101,13 @@ To configure the `DATABASES` setting from an RDS JSON object stored in AWS Secre
 
 ### Install dependencies & pre-commit hooks
 
-```
+```shell
 poetry install && poetry run pre-commit install
 ```
 
 ### Run the tests
 
-```
+```shell
 poetry run pytest
 ```
 
@@ -89,7 +122,7 @@ To publish the Python package `dbt-copilot-python`, you will need an API token.
 
 Update the version, as the same version cannot be published to PyPi.
 
-```
+```shell
 poetry version patch
 ```
 
@@ -97,7 +130,7 @@ More options for the `version` command can be found in the [Poetry documentation
 
 Build the Python package.
 
-```
+```shell
 poetry build
 ```
 
@@ -105,7 +138,7 @@ Publish the Python package.
 
 _Note: Make sure your Pull Request (PR) is approved and contains the version upgrade in `pyproject.toml` before publishing the package._
 
-```
+```shell
 poetry publish
 ```
 
