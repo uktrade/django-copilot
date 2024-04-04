@@ -13,6 +13,7 @@ def allowed_hosts() -> list[str]:
     return ["0.0.0.0"]
 
 
+@patch.dict(os.environ, {"ECS_CONTAINER_METADATA_URI_V4": "http://test.com"}, clear=True)
 def test_setup_allowed_hosts_with_not_copilot_does_not_add_ip(allowed_hosts: list[str]):
     assert "COPILOT_ENVIRONMENT_NAME" not in os.environ
 
@@ -21,7 +22,14 @@ def test_setup_allowed_hosts_with_not_copilot_does_not_add_ip(allowed_hosts: lis
     assert allowed_hosts == ["0.0.0.0"]
 
 
-@patch.dict(os.environ, {"COPILOT_ENVIRONMENT_NAME": "http://test.com"}, clear=True)
+@patch.dict(
+    os.environ,
+    {
+        "ECS_CONTAINER_METADATA_URI_V4": "http://test.com",
+        "COPILOT_ENVIRONMENT_NAME": "test-environment",
+    },
+    clear=True,
+)
 def test_setup_allowed_hosts_with_exception_does_not_add_ip(allowed_hosts):
     with requests_mock.Mocker() as mock:
         mock.get("http://test.com", exc=requests.exceptions.RequestException)
@@ -31,7 +39,14 @@ def test_setup_allowed_hosts_with_exception_does_not_add_ip(allowed_hosts):
         assert allowed_hosts == ["0.0.0.0"]
 
 
-@patch.dict(os.environ, {"COPILOT_ENVIRONMENT_NAME": "http://test.com"}, clear=True)
+@patch.dict(
+    os.environ,
+    {
+        "ECS_CONTAINER_METADATA_URI_V4": "http://test.com",
+        "COPILOT_ENVIRONMENT_NAME": "test-environment",
+    },
+    clear=True,
+)
 def test_setup_allowed_hosts_with_copilot_adds_ip(allowed_hosts):
     mock_response = {"Networks": [{"IPv4Addresses": ["1.1.1.1"]}]}
 
